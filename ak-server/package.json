@@ -14,10 +14,13 @@
   "license": "Apache-2.0",
   "dependencies": {
     "cors": "2.8.1",
+    "crypto-js": "3.1.8",
     "express": "4.14.0",
     "express-graphql": "0.6.1",
     "graphql": "0.8.2",
     "guid": "0.0.12",
-    "nconf": "0.8.4"
+    "nconf": "0.8.4",
+    "request": "2.78.0",
+    "request-promise": "4.1.1"
   }
 }
