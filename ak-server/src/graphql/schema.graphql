@@ -1,0 +1,38 @@
+
+type AKInit {
+  appId: ID!
+  version: String!
+  csrf: String!
+}
+
+type AKAuth {
+  csrfNonce: String!
+  authCode: String!
+}
+
+type AKPhone {
+  countryCode: String!
+  number: Int!
+}
+
+type AKEmail {
+  address: String!
+}
+
+type AKUser {
+  userId: ID!
+  accessToken: String!
+  expiresAt: Int!
+  phone: AKPhone
+  email: AKEmail
+}
+
+type AKAuthResponse {
+  user: AKUser
+  errors: [String]!
+}
+
+type Query {
+  init: AKInit!
+  auth(csrfNonce: String!, authCode: String!): AKAuthResponse
+}

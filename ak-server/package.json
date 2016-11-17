@@ -1,0 +1,23 @@
+{
+  "name": "ak-server",
+  "version": "0.0.1",
+  "description": "Google AppEngine Nodejs Server for Account Kit",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "account-kit",
+    "google appengine"
+  ],
+  "author": "Donnie Flood <npm@donnie.com>",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "cors": "2.8.1",
+    "express": "4.14.0",
+    "express-graphql": "0.6.1",
+    "graphql": "0.8.2",
+    "guid": "0.0.12",
+    "nconf": "0.8.4"
+  }
+}
