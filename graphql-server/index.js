@@ -15,11 +15,17 @@ var app = express();
 
 app.use(cors());
 
+var isProd = process.env.NODE_ENV === 'production'
+
 app.use('/graphql', graphqlHTTP({
   schema: schema,
   rootValue: root,
-  graphiql: process.env.NODE_ENV !== 'production',
+  graphiql: !isProd
 }));
+
+if(!isProd) {
+  console.log('CSRF', config.get('CSRF'))
+}
 
 app.listen(8080);
 console.log('Running a GraphQL API server at localhost:8080/graphql');

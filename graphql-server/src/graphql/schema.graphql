@@ -11,8 +11,9 @@ type AKAuth {
 }
 
 type AKPhone {
-  countryCode: String!
-  number: Int!
+  country_prefix: String!
+  number: String!
+  national_number: String!
 }
 
 type AKEmail {

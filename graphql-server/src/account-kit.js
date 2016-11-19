@@ -12,7 +12,7 @@ const TOKEN_URL = `${BASE_URL}/access_token`
 const ak = {
 
   accountDetails: (access_token) => {
-    var appsecret_proof = crypto.HmacSHA256(accessToken, AK_APP_SECRET);
+    var appsecret_proof = ""+crypto.HmacSHA256(access_token, AK_APP_SECRET); // force into string
     var options = {
         uri: ME_URL,
         qs: {
@@ -39,3 +39,5 @@ const ak = {
   }
 
 }
+
+module.exports = ak
