@@ -7,7 +7,7 @@
   },
   "dependencies": {
     "react": "15.3.2",
-    "react-account-kit-web": "0.0.1",
+    "react-account-kit-web": "0.1.0",
     "react-dom": "15.3.2"
   },
   "scripts": {
