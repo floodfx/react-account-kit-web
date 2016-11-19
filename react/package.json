@@ -1,6 +1,6 @@
 {
   "name": "react-account-kit-web",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "React Component for Account Kit",
   "main": "./lib/index.js",
   "scripts": {
