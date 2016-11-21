@@ -1,14 +1,14 @@
 {
-  "name": "ak-server",
-  "version": "0.0.1",
-  "description": "Google AppEngine Nodejs Server for Account Kit",
+  "name": "graphql-server",
+  "version": "0.0.2",
+  "description": "Companion GraphQL Server for react-account-kit-web",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
     "account-kit",
-    "google appengine"
+    "graphql"
   ],
   "author": "Donnie Flood <npm@donnie.com>",
   "license": "Apache-2.0",
