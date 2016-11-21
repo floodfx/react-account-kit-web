@@ -14,7 +14,7 @@ npm install --save react-account-kit-web
 import { AccountKitWeb, AccountKitWebClient } from 'react-account-kit-web';
 ```
 #### AccountKitWeb
-`AccountKitWeb` is the React component that loads the AccountKit javascript code 
+`AccountKitWeb` is the React component that loads the AccountKit javascript code
 and initializes it using data returned from the GraphQL server.  It expects to be passed
 a `AccountKitWebClient` initialized with the url for the GraphQL server.  Also requires an
 `onInit` function and accepts an optional `debug` flag.
@@ -40,9 +40,14 @@ render() {
 
 ## GraphQL Server
 ### Install
-Clone this repository 
+```
+git clone --depth=1 --branch=master git@github.com:floodfx/react-account-kit-web.git temp
+rm -rf temp/.git
+mv temp/graphql-server .
+rm -rf temp
+```
 #### Suggestions?
-Lmk how we could make this better
+Open an issue if you have thoughts on how we could make this better.
 
 ### Run
 ```bash
