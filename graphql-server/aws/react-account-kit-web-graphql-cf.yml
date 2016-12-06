@@ -1,0 +1,121 @@
+AWSTemplateFormatVersion: "2010-09-09"
+
+Parameters:
+
+  AkAppId:
+    Type: String
+
+  AkAppSecret:
+    Type: String
+    NoEcho: true
+
+  AkAppVersion:
+    Type: String
+    Default: 'v1.0'
+
+  CSRF:
+    Type: String
+    NoEcho: true
+
+  LambdaCodeS3KeyTimestamp:
+    Type: String
+
+  LambdaCodeS3ZipFileName:
+    Type: String
+
+  LambdaCodeS3BucketName:
+    Type: String
+    Description: "Enter the name of the bucket that will host the lambda code."
+
+Resources:
+
+  ApiGatewayLambdaPermission:
+    Type: "AWS::Lambda::Permission"
+    Properties:
+      Action: "lambda:invokeFunction"
+      FunctionName: !GetAtt Lambda.Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Join ["", ["arn:aws:execute-api:", !Ref "AWS::Region", ":", !Ref "AWS::AccountId", ":", !Ref ApiGateway, "/*"]]
+
+  ApiGateway:
+    Type: "AWS::ApiGateway::RestApi"
+    Properties:
+      Description: HTTPS Endpoint for AccountKit GraphQL Lambda Invokations
+      Name: AccountKitGraphQL
+
+  ApiGatewayProxyResource:
+    Type: "AWS::ApiGateway::Resource"
+    Properties:
+      RestApiId: !Ref ApiGateway
+      ParentId: !GetAtt ApiGateway.RootResourceId
+      PathPart: "{proxy+}"
+
+  ApiGatewayMethod:
+    Type: "AWS::ApiGateway::Method"
+    Properties:
+      RestApiId: !Ref ApiGateway
+      ResourceId: !Ref ApiGatewayProxyResource
+      HttpMethod: ANY
+      AuthorizationType: NONE
+      Integration:
+        Type: AWS_PROXY
+        PassthroughBehavior: WHEN_NO_MATCH
+        IntegrationHttpMethod: POST
+        Uri: !Join ["", ["arn:aws:apigateway:", !Ref "AWS::Region", ":lambda:path/2015-03-31/functions/", !GetAtt Lambda.Arn, "/invocations"]]
+        IntegrationResponses:
+          - StatusCode: 200
+
+  RestApiDeployment:
+    Type: "AWS::ApiGateway::Deployment"
+    Properties:
+      RestApiId: !Ref ApiGateway
+      StageName: dev
+    DependsOn:
+      - ApiGatewayMethod
+
+  Lambda:
+    Type: "AWS::Lambda::Function"
+    Properties:
+      Code:
+        S3Bucket: !Ref LambdaCodeS3BucketName
+        S3Key: !Join ["", ["lambda/", !Ref LambdaCodeS3ZipFileName, "-", !Ref LambdaCodeS3KeyTimestamp, ".zip"]]
+      Description: Lambda function for Account Kit GraphQL
+      Handler: lambda.handler
+      FunctionName: !Ref LambdaCodeS3ZipFileName
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Runtime: nodejs4.3
+      Timeout: 5 #seconds
+      Environment:
+        Variables:
+          AK_APP_ID: !Ref AkAppId
+          AK_APP_SECRET: !Ref AkAppSecret
+          AK_APP_VERSION: !Ref AkAppVersion
+          CSRF: !Ref CSRF
+
+  LambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+            - lambda.amazonaws.com
+          Action:
+          - sts:AssumeRole
+      Path: "/"
+      Policies:
+      - PolicyName: root
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Effect: Allow
+            Action:
+            - logs:*
+            Resource: arn:aws:logs:*:*:*
+
+Outputs:
+  ApiUrl:
+    Description: "Url endpoint for API call backed by Lambda"
+    Value: !Join ["", ["https://", !Ref ApiGateway, ".execute-api.", !Ref "AWS::Region", ".amazonaws.com/dev/graphql"]]

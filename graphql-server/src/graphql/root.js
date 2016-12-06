@@ -1,9 +1,9 @@
 var config = require('../config');
 var ak = require('../account-kit')
 
-const CSRF = config.get('CSRF')
+var CSRF = config.get('CSRF')
 
-const root = {
+var root = {
   init: () => {
     return {
       appId: config.get('AK_APP_ID'),
@@ -11,10 +11,13 @@ const root = {
       version: config.get('AK_APP_VERSION')
     }
   },
-  auth: ({csrfNonce, authCode}) => {
+  auth: (input) => {
+    console.log("input", input)
+    var csrfNonce = input.csrfNonce;
+    var authCode = input.authCode;
     return new Promise((resolve, reject) => {
-      let errors = []
-      let user = null
+      var errors = []
+      var user = null
       if(CSRF !== csrfNonce) {
         errors.push("CSRF Validation Failed")
         reject({user, errors});

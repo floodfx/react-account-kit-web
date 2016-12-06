@@ -1,15 +1,10 @@
 var express = require('express');
 var graphqlHTTP = require('express-graphql');
-var { buildSchema, Source } = require('graphql');
 var fs = require('fs');
 var cors = require('cors');
-var root = require('./src/graphql/root');
 var config = require('./src/config');
-
-
-// load schema from file
-const schemaFile = fs.readFileSync("./src/graphql/schema.graphql")
-var schema = buildSchema(new Source(schemaFile));
+var root = require('./src/graphql/root');
+var schema = require('./src/graphql/schema');
 
 var app = express();
 
@@ -29,3 +24,5 @@ if(!isProd) {
 
 app.listen(8080);
 console.log('Running a GraphQL API server at localhost:8080/graphql');
+
+module.exports = app
